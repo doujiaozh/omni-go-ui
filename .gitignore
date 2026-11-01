@@ -1,0 +1,25 @@
+# ---- build artifacts -------------------------------------------------------
+/dist/
+/omnigoui.exe
+/omnigoui
+/omni-go-ui.exe
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.*
+
+# ---- scratch ---------------------------------------------------------------
+/tmp/
+/.omni-profile/
+*.log
+
+# ---- editors / OS ----------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

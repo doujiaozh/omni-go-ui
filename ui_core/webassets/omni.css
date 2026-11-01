@@ -1,0 +1,177 @@
+/* ============================================================================
+ * Omni-Go-UI framework stylesheet (/_omni/omni.css)  v1.0.0
+ *
+ * Responsibilities: CSS reset, the design-token layer, the native titlebar,
+ * scrollbars, the reduced-motion contract and the lite perf profile.
+ * App styles live in the app's own bundle and are free to override everything.
+ * ========================================================================== */
+
+:root {
+  /* surfaces */
+  --bg-0: #070b14;
+  --bg-1: #0d1420;
+  --panel: rgba(255, 255, 255, 0.045);
+  --panel-2: rgba(255, 255, 255, 0.068);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-2: rgba(255, 255, 255, 0.14);
+
+  /* text */
+  --text-1: #eaf2ff;
+  --text-2: #9db0cc;
+  --text-3: #64748b;
+
+  /* accents */
+  --accent: #35e0c9;
+  --accent-2: #7c6cff;
+  --warn: #ffb020;
+  --crit: #ff5d73;
+  --ok: #35e0c9;
+
+  /* shape */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --blur: 18px;
+
+  --shadow-lg: 0 22px 60px -18px rgba(0, 0, 0, 0.7);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Microsoft YaHei UI",
+    "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "JetBrains Mono", Consolas,
+    "SF Mono", Menlo, monospace;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,
+body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient light that makes the dark shell feel like a room, not a void. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(900px 520px at 8% -12%, rgba(53, 224, 201, 0.10), transparent 62%),
+    radial-gradient(840px 540px at 96% 4%, rgba(124, 108, 255, 0.13), transparent 60%),
+    radial-gradient(1200px 760px at 50% 124%, rgba(53, 224, 201, 0.05), transparent 62%);
+}
+
+button,
+input,
+select,
+textarea { font: inherit; color: inherit; }
+
+button { background: none; border: 0; cursor: pointer; }
+
+a { color: var(--accent); }
+
+/* Numbers must not jitter while a dashboard ticks at 1 Hz. */
+.num,
+.tabular,
+[variant-numeric] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ---- titlebar ---------------------------------------------------------- */
+.omni-titlebar {
+  height: 44px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  position: relative;
+  z-index: 5;
+  user-select: none;
+  -webkit-user-select: none;
+  border-bottom: 1px solid var(--line);
+  background: rgba(7, 11, 20, 0.72);
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+.omni-titlebar .spacer { flex: 1 1 auto; }
+
+.omni-winbtn {
+  width: 34px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--text-2);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.omni-winbtn:hover { background: rgba(255, 255, 255, 0.09); color: var(--text-1); }
+.omni-winbtn:active { background: rgba(255, 255, 255, 0.14); }
+.omni-winbtn.close:hover { background: rgba(255, 93, 115, 0.16); color: var(--crit); }
+.omni-winbtn svg { width: 15px; height: 15px; display: block; }
+
+/* ---- scrollbars (thin, dark, overlay-friendly) ------------------------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* ---- focus ------------------------------------------------------------ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+ * Performance profiles
+ *
+ * hello.perf is applied by omni.js as <html data-perf="full|lite">. On
+ * software-rendered machines (old GPUs, OMNI_LOWEND=1) blur and ambient
+ * gradients are expensive; lite flattens them instead of dropping frames.
+ * ========================================================================== */
+:root[data-perf="lite"] body::before { display: none; }
+:root[data-perf="lite"] {
+  --blur: 0px;
+  --shadow-lg: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+}
+:root[data-perf="lite"] .omni-titlebar { background: #0a101b; }
+
+/* ============================================================================
+ * Reduced motion: a system monitor's numbers change every second; animations
+ * are decoration and must respect the OS preference.
+ * ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Omni System Monitor · 系统监视器</title>
+<link rel="stylesheet" href="/_omni/omni.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ────────────────────────── titlebar ────────────────────────── -->
+  <header class="titlebar omni-titlebar" data-drag>
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <span class="brand-name">OMNI-GO-UI</span>
+      <span class="brand-sep" aria-hidden="true"></span>
+      <span class="brand-sub">System Monitor · 系统监视器</span>
+    </div>
+
+    <div class="tb-spacer"></div>
+
+    <div class="pill" id="status-pill" role="status" aria-live="polite" data-state="connecting">
+      <span class="pill-dot" aria-hidden="true"></span>
+      <span class="pill-zh" id="status-zh">连接中</span>
+      <span class="pill-en" id="status-en">Connecting</span>
+    </div>
+
+    <button class="tb-btn" id="btn-pause" type="button" aria-pressed="false"
+            aria-label="暂停 Pause" title="暂停 / 继续 · Pause / Resume">
+      <svg class="ico-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+      <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13L19 12z"/></svg>
+      <span class="tb-btn-label"><span id="pause-zh">暂停</span><em id="pause-en">Pause</em></span>
+    </button>
+
+    <div class="win-controls" id="win-controls" hidden>
+      <button class="win-btn" id="win-min" type="button" aria-label="最小化 Minimize" title="最小化 / Minimize">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+      </button>
+      <button class="win-btn" id="win-max" type="button" aria-label="最大化 Maximize" title="最大化 / Maximize">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+      </button>
+      <button class="win-btn win-close" id="win-close" type="button" aria-label="关闭 Close" title="关闭 / Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ─────────────────────────── main grid ──────────────────────── -->
+  <main class="main">
+
+    <section class="col col-left">
+
+      <!-- A. hero strip -->
+      <div class="hero">
+        <article class="metric" id="card-cpu" data-trend="flat">
+          <div class="metric-top">
+            <span class="m-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2.5"/><path d="M9.5 2.5v3M14.5 2.5v3M9.5 18.5v3M14.5 18.5v3M2.5 9.5h3M2.5 14.5h3M18.5 9.5h3M18.5 14.5h3"/></svg>
+            </span>
+            <span class="m-label">CPU 使用率<em>CPU Load</em></span>
+            <span class="m-trend" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+            </span>
+          </div>
+          <div class="metric-value"><span class="num" id="m-cpu">--</span><span class="unit">%</span></div>
+          <div class="metric-sub"><span class="num" id="m-cpus">--</span> 核心<em>Cores</em></div>
+        </article>
+
+        <article class="metric" data-accent="mem">
+          <div class="metric-top">
+            <span class="m-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 17v3M12 17v3M17 17v3M7.5 11v2M12 11v2M16.5 11v2"/></svg>
+            </span>
+            <span class="m-label">内存<em>Memory</em></span>
+            <span class="m-pct num" id="m-mem-pct">--%</span>
+          </div>
+          <div class="metric-value"><span class="num" id="m-mem">--</span><span class="unit">GiB</span></div>
+          <div class="metric-sub">共 <span class="num" id="m-mem-total">--</span> GiB<em>Total</em></div>
+        </article>
+
+        <article class="metric">
+          <div class="metric-top">
+            <span class="m-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.3 2"/></svg>
+            </span>
+            <span class="m-label">运行时长<em>Uptime</em></span>
+          </div>
+          <div class="metric-value"><span class="num" id="m-uptime">--:--:--</span></div>
+          <div class="metric-sub">持续运行<em>Since boot</em></div>
+        </article>
+
+        <article class="metric">
+          <div class="metric-top">
+            <span class="m-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6.5" r="2.2"/><circle cx="18" cy="6.5" r="2.2"/><circle cx="12" cy="17.5" r="2.2"/><path d="M8 7.4l2.9 8.2M16 7.4l-2.9 8.2"/></svg>
+            </span>
+            <span class="m-label">Goroutines<em>并发协程</em></span>
+          </div>
+          <div class="metric-value"><span class="num" id="m-goroutines">--</span></div>
+          <div class="metric-sub"><span id="m-go">go</span><em>Runtime</em></div>
+        </article>
+      </div>
+
+      <!-- B. rolling chart -->
+      <section class="panel chart-panel">
+        <div class="panel-head">
+          <div class="panel-title">CPU / 内存 趋势<em>90s Rolling Load</em></div>
+          <div class="legend">
+            <span class="legend-item"><i class="dot dot-cpu" aria-hidden="true"></i>CPU <b class="num" id="lg-cpu">--%</b></span>
+            <span class="legend-item"><i class="dot dot-mem" aria-hidden="true"></i>内存 <b class="num" id="lg-mem">--%</b></span>
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="chart" aria-label="CPU 与内存 90 秒滚动趋势图"></canvas>
+        </div>
+      </section>
+
+    </section>
+
+    <aside class="col col-right">
+
+      <!-- C. gauge -->
+      <section class="panel gauge-panel">
+        <div class="panel-head">
+          <div class="panel-title">实时负载<em>Live Load</em></div>
+          <span class="chip num" id="g-chip" title="采样周期 1s">1s</span>
+        </div>
+        <div class="gauge-wrap">
+          <svg class="gauge" id="gauge" viewBox="0 0 168 168" role="img" aria-label="CPU 使用率 --">
+            <defs>
+              <linearGradient id="gauge-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#35e0c9"/>
+                <stop offset="100%" stop-color="#7c6cff"/>
+              </linearGradient>
+            </defs>
+            <circle class="gauge-track" cx="84" cy="84" r="70" fill="none" stroke-width="9"/>
+            <circle class="gauge-arc" id="gauge-arc" cx="84" cy="84" r="70" fill="none"
+                    stroke="url(#gauge-grad)" stroke-width="9" stroke-linecap="round"
+                    transform="rotate(-90 84 84)"/>
+          </svg>
+          <div class="gauge-center">
+            <div class="gauge-value"><span class="num" id="gauge-value">--</span><span class="gauge-unit">%</span></div>
+            <div class="gauge-sub">CPU 占用<em>CPU Usage</em></div>
+          </div>
+        </div>
+        <div class="ministats">
+          <div class="ministat"><div class="ms-k">核心<em>Cores</em></div><div class="ms-v num" id="g-core">--</div></div>
+          <div class="ministat"><div class="ms-k">负载<em>Load</em></div><div class="ms-v num" id="g-load">--</div></div>
+          <div class="ministat"><div class="ms-k">内存<em>Memory</em></div><div class="ms-v num" id="g-mem">--</div></div>
+        </div>
+      </section>
+
+      <!-- D. top processes -->
+      <section class="panel proc-panel">
+        <div class="panel-head">
+          <div class="panel-title">进程排行<em>Top Processes</em></div>
+          <div class="panel-actions">
+            <span class="chip num" id="proc-count">0</span>
+            <button class="icon-btn" id="btn-refresh" type="button" aria-label="刷新进程列表 Refresh" title="刷新 / Refresh">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 3.5V9h-5.4"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="proc-head" aria-hidden="true">
+          <span>进程<em>Process</em></span>
+          <span class="ta-c">PID</span>
+          <span class="ta-c">线程<em>Thr</em></span>
+          <span>占比<em>Share</em></span>
+          <span class="ta-r">MB</span>
+        </div>
+        <div class="proc-list" id="proc-list" role="list"></div>
+      </section>
+
+    </aside>
+  </main>
+
+  <!-- ────────────────────────── status bar ──────────────────────── -->
+  <footer class="statusbar">
+    <span class="sb-conn" id="st-conn" data-state="connecting">
+      <i class="sb-dot" aria-hidden="true"></i>
+      <span id="st-conn-zh">连接中</span>
+      <em id="st-conn-en">Connecting</em>
+    </span>
+    <span class="sb-sep" aria-hidden="true">·</span>
+    <span class="sb-item">RPC <b class="num" id="st-rpc">—</b></span>
+    <span class="sb-sep" aria-hidden="true">·</span>
+    <span class="sb-item"><span class="sb-k">事件<em>Events</em></span> <b class="num" id="st-events">0</b></span>
+    <span class="sb-sep" aria-hidden="true">·</span>
+    <span class="sb-item"><span class="sb-k">帧<em>Frames</em></span> <b class="num" id="st-frames">0</b></span>
+    <span class="sb-spacer"></span>
+    <span class="sb-item">Chrome app mode</span>
+  </footer>
+
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="/_omni/omni.js"></script>
+<script src="/app.js" defer></script>
+</body>
+</html>
