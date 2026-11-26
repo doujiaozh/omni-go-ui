@@ -23,3 +23,13 @@ coverage.*
 .DS_Store
 Thumbs.db
 desktop.ini
+*.tmp
+*.bak
+.env
+.env.*
+!.env.example
+*.iml
+/bin/
+/build/
+*.prof
+vendor/
